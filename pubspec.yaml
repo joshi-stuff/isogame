@@ -1,0 +1,9 @@
+name: isogame
+version: 0.0.1
+author: Iván Zaera Avellón <izaera@gmail.com>
+description: A library for creating isometric perspective games written in Dart.
+homepage: http://github.com/izaera/isogame
+environment:
+  sdk: '>=0.8.10+6 <2.0.0'
+dependencies:
+  browser: any
