@@ -6,16 +6,16 @@ import 'package:isogame/enums.dart';
 import 'package:isogame/graphics.dart';
 
 
-const TERRAIN_SCALE = true;
-const TERRAIN_ROTATE = true;
-const ITEM_ROTATE = true;
-const ITEM_IMAGE_BORDER = false;
+bool TERRAIN_SCALE = true;
+bool TERRAIN_ROTATE = true;
+bool ITEM_ROTATE = true;
+bool ITEM_IMAGE_BORDER = false;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // TERRAIN
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class Terrain extends Widget {
+class Terrain extends Widget with Attach {
   final Size tileSize;
   List<List<Tile>> _tiles;
   TilesAccessor _tilesAccesor;
@@ -44,10 +44,6 @@ class Terrain extends Widget {
     int y = (bounds.diagonalLength - scaledBounds.diagonalLength) ~/ 2;
 
     position = new Point(x, -y);
-  }
-
-  void attach(Element parent) {
-    parent.append(element);
   }
 
   TilesAccessor get tiles => _tilesAccesor;
@@ -132,22 +128,21 @@ abstract class Item extends Widget {
   final Size _tileSize;
   final int _tileHeight;
   Element _image;
-  Element _placeHolder;
+
+  final _placeHolder = new DivElement()
+      ..style.position = "absolute"
+      ..style.left = "0"
+      ..style.top = "0"
+      ..style.right = "0"
+      ..style.bottom = "0"
+      ..style.opacity = "0.4";
 
   Item(this._tileSize, this._tileHeight);
 
   Element createElement() {
-    _placeHolder = new DivElement()
-        ..style.position = "absolute"
-        ..style.left = "0"
-        ..style.top = "0"
-        ..style.right = "0"
-        ..style.bottom = "0"
-        ..style.opacity = "0.4";
-
     _image = createImage()
         ..style.position = "absolute"
-        ..style.border = ITEM_IMAGE_BORDER ? "1px solid blue" : ""
+        ..style.border = ITEM_IMAGE_BORDER ? "2px solid blue" : ""
         ..style.setProperty("-webkit-transform", "${ITEM_ROTATE ? 'rotate(-45deg)' : ''}");
 
     return new DivElement()
@@ -159,14 +154,13 @@ abstract class Item extends Widget {
 
   void initialize() {
     super.initialize();
-
     size = _tileSize.scale(Tile.SIZE);
   }
 
   void set size(Size size) {
     super.size = size;
 
-    // Image position
+    // Image size
     var bounds = new Rectangle(Point.ORIGIN, size);
     var diagonalLength = bounds.diagonalLength;
     var imageSize = new Size(diagonalLength, diagonalLength + _tileHeight * Tile.DIAGONAL_LENGTH);
@@ -174,7 +168,7 @@ abstract class Item extends Widget {
     _image.style.width = "${imageSize.width}px";
     _image.style.height = "${imageSize.height}px";
 
-    // Image size
+    // Image position
     var imagePosition = new MutablePoint();
 
     imagePosition.x = size.width ~/ 2;
@@ -187,7 +181,6 @@ abstract class Item extends Widget {
   }
 
   void set highlight(String color) {
-    element;
     _placeHolder.style.backgroundColor = (color == null) ? "" : color;
   }
 
@@ -198,5 +191,3 @@ abstract class Item extends Widget {
     _image.style.top = "${y}px";
   }
 }
-
-

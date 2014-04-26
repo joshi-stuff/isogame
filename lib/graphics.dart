@@ -156,3 +156,15 @@ abstract class Widget {
     parent.append(element);
   }
 }
+
+abstract class Attach {
+  Element get element;
+
+  void attach(Element parent) {
+    parent.append(element);
+  }
+
+  void detach() {
+    element.remove();
+  }
+}

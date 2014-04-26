@@ -44,7 +44,7 @@ class Tree extends Item {
 // CASTLE
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class Castle extends Item {
-  static final TILE_SIZE = new Size(3, 3);
+  static final TILE_SIZE = new Size(6, 6);
   static const TILE_HEIGHT = 3;
 
   Castle() : super(TILE_SIZE, TILE_HEIGHT);
@@ -53,7 +53,6 @@ class Castle extends Item {
 
   void initialize() {
     super.initialize();
-
     level = 2;
   }
 }

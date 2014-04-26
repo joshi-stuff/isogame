@@ -4,11 +4,26 @@ import 'dart:html';
 import 'dart:math';
 
 import 'package:isogame/board.dart';
+import 'package:isogame/controls.dart';
 import 'package:isogame/graphics.dart';
 import 'package:isogame/items.dart';
 
 
 void main() {
+  var terrain = _createTerrain();
+  terrain.attach(document.body);
+
+  var debugPanel = new DebugPanel();
+  debugPanel.onShowItemImageBordersChange.listen((ev) {
+    terrain.detach();
+    ITEM_IMAGE_BORDER = !ITEM_IMAGE_BORDER;
+    terrain = _createTerrain();
+    terrain.attach(document.body);
+  });
+  debugPanel.attach(document.body);
+}
+
+Terrain _createTerrain() {
   final terrainSize = new Size(20, 20);
   final terrain = new Terrain(terrainSize);
   final rnd = new Random();
@@ -59,6 +74,6 @@ void main() {
     }
   }
 
-  terrain.attach(document.body);
+  return terrain;
 }
 
